@@ -13,7 +13,7 @@ class KanbanIssueService extends Service
 
         $this->validation_rules = [
             'task' => 'required|min:5|max:255',
-            'hours' => ['nullable','numeric','sometimes','max:99'],
+            'hours' => 'max:99',
         ];
 
 

@@ -2,15 +2,14 @@
 
 namespace App\Http\Services;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 abstract class Service
 {
 
-    protected string $model;
+    protected $model;
     protected array $validation_rules;
     protected Request $request;
 
@@ -18,33 +17,104 @@ abstract class Service
     {
         $this->model = $model;
         $this->request = Request::capture();
+        $this->validation_rules = [];
     }
 
-    public function validate()
+    public function validate($data): JsonResponse
     {
-        $this->request->validate($this->validation_rules);
+        $validator = Validator::make($data, $this->validation_rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'oh' => 'no',
+                'error' => $validator->messages()
+            ]);
+        }
+
+        return response()->json([
+            'oh' => 'yes'
+        ]);
     }
 
-    protected function set_validation_rules($array)
+    protected function set_validation_rules($array): void
     {
         $this->validation_rules = $array;
     }
 
-    public function validation_rules()
+    public function validation_rules(): array
     {
         return $this->validation_rules;
     }
 
-    public function create($array)
+    /**
+     *  Entity
+     *
+     */
+
+    public function entity($json_response)
     {
-        $this->validate();
-        return $this->model::create($array);
+
+        try {
+            $id = $json_response->getData()->id;
+            return $this->find($id);
+        }catch (\Throwable $exception){
+            return null;
+        }
+
     }
 
-    public function update($id,$array)
+    /**
+     *  Create
+     *
+     */
+
+    public function create($data)
     {
-        $this->validate();
-        return $this->model::where('id', $id)->update($array);
+        $json_response = $this->create_json_response($data);
+        return $this->entity($json_response);
+    }
+
+    public function create_json_response($data)
+    {
+        $json_response = $this->validate($data);
+
+        if($json_response->getData()->oh == "no") {
+            return $json_response;
+        }
+
+        $entity = $this->model::create($data);
+
+        return response()->json($entity);
+
+    }
+
+    /**
+     *  Update
+     */
+
+    public function update($id, $new_data)
+    {
+        $json_response = $this->update_json_response($id, $new_data);
+        return $this->entity($json_response);
+    }
+
+    public function update_json_response($id,$new_data): JsonResponse
+    {
+
+        $entity_res = null;
+
+        $json_response = $this->validate($new_data);
+
+        if($json_response->getData()->oh == "no") {
+            return $json_response;
+        }
+
+        $bool = $this->model::where('id', $id)->update($new_data);
+
+        if($bool)
+            $entity_res = $this->find($id);
+
+        return response()->json($entity_res);
     }
 
     public function delete($id)
