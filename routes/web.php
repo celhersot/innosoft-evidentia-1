@@ -147,6 +147,12 @@ Route::group(['prefix' => '{instance}', 'middleware' => ['checkblock']], functio
 
 
     /**
+     *  RAFFLES
+     */
+
+    Route::get('/raffle', 'RafflesController@raffle ')->name('raffle');
+
+    /**
      *  EVIDENCES
      */
 
@@ -471,5 +477,13 @@ Route::group(['prefix' => '{instance}', 'middleware' => ['checkblock']], functio
      *  GIT
      */
     Route::get('/updates','GitController@list')->name('updates.list');
+
+
+    /**
+     *  RAFFLES
+     */
+
+    Route::get('/raffles', 'RafflesController@list')->name('raffles.list');
+
 
 });
