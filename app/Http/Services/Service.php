@@ -61,7 +61,6 @@ abstract class Service
 
           
     
-    @@ -88,4 +158,4 @@ public function all_sorted_by_desc($field)
   
     {
         $entity = $this->model::find($id);
