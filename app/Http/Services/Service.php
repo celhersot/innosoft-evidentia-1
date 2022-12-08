@@ -48,41 +48,48 @@ abstract class Service
     }
 
     public function delete($id)
+
+    
+          
+            
+    
+
+          
+          
+            
+    
+
+          
+    
+  
     {
         $entity = $this->model::find($id);
         $entity->delete();
     }
-
     public function find($id)
     {
         return $this->model::find($id);
     }
-
     public function find_or_fail($id)
     {
         return $this->model::findOrFail($id);
     }
-
     public function find_by($array)
     {
         return $this->model::where($array)->first();
     }
-
     public function find_all_by($array)
     {
         return $this->model::where($array)->get();
     }
-
     public function all()
     {
         return $this->model::all();
     }
-
     public function all_sorted_by($field)
     {
         return $this->model::all()->sortBy($field);
     }
-
     public function all_sorted_by_desc($field)
     {
         return $this->model::all()->sortByDesc($field);
