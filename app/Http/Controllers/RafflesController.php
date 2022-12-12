@@ -42,16 +42,28 @@ class RafflesController extends Controller{
         $raffle = Raffle::find($id);
 
         $candidates = Attendee::where(['event_id'=> $raffle->event->id])->get();
+        
+        $mensaje = 'No hay ningún asistente a este evento todavía';
 
-        $selected = $candidates[rand(0, count($candidates))];
+        $estado = 'error';
+        
+        if(isset($raffle->winner_id)){
+            $mensaje = 'Este sorteo ya tiene ganador';
+        }else{
 
-        $winner = User::find($selected->user_id);
+            if(count($candidates) != 0){
+                $selected = $candidates[rand(0, count($candidates))];
 
-        $raffle->winner_id =  $winner->id;
+                $raffle->winner_id = $selected->user_id;
 
-        $raffle->save();
+                $raffle->save();
 
-        return redirect()->route('raffle.view', ['instance' => $instance, 'id' => $raffle->id]);
+                $mensaje = 'Ya tenemos ganador!';
+
+                $estado = 'success';
+            }
+        }
+        return redirect()->route('raffle.view', ['instance' => $instance, 'id' => $raffle->id])->with($estado, $mensaje);;
     }
 
     /****************************************************************************
