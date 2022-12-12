@@ -20,9 +20,10 @@ class CreateRafflesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('prize');
-            $table->foreignId('user_id')->nullable(true);
-            $table->foreignId('evidence_id')->nullable(false);
+            $table->foreignId('winner_id')->nullable(true);
+            $table->foreignId('event_id')->nullable(false);
 
+            $table->timestamps();
         });
     }
 

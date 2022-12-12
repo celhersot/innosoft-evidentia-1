@@ -9,16 +9,16 @@ class Raffle extends Model
     protected $table="raffles";
 
     protected $fillable = [
-        'title', 'description', 'user_id', 'evidence_id', 'prize'
+        'title', 'description', 'winner_id', 'event_id', 'prize'
     ];
 
-    public function user()
+    public function winner()
     {
         return $this->belongsTo('App\Models\User');
     }
 
-    public function evidence()
+    public function event()
     {
-        return $this->belongsTo('App\Models\Evidence');
+        return $this->belongsTo('App\Models\Event');
     }
 }

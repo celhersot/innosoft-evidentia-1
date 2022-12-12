@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendee;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,4 +26,82 @@ class RafflesController extends Controller{
         return view('raffle.list',
             ['instance' => $instance, 'raffles' => $raffles]);
     }
+
+    public function view($instance,$id)
+    {
+        $instance = \Instantiation::instance();
+        $raffle = Raffle::find($id);
+
+        return view('raffle.view',
+            ['instance' => $instance, 'raffle' => $raffle]);
+    }
+
+    public function raffle($instance, $id)
+    {
+        $instance = \Instantiation::instance();
+        $raffle = Raffle::find($id);
+
+        $candidates = Attendee::where(['event_id'=> $raffle->event->id])->get();
+
+        $selected = $candidates[rand(0, count($candidates))];
+
+        $winner = User::find($selected->user_id);
+
+        $raffle->winner_id =  $winner->id;
+
+        $raffle->save();
+
+        return redirect()->route('raffle.view', ['instance' => $instance, 'id' => $raffle->id]);
+    }
+
+    /****************************************************************************
+     * CREATE A RAFFLE
+     ****************************************************************************/
+
+    public function create()
+    {
+        $instance = \Instantiation::instance();
+        $events = Event::all();
+
+        return view('raffle.createandedit', ['route_publish' => route('raffle.publish',$instance),
+                                                'instance' => $instance, 
+                                                'events' => $events]);
+    }
+
+    public function publish(Request $request)
+    {
+        return $this->new($request,"PENDING");
+    }
+
+    private function new($request,$status)
+    {
+
+        $instance = \Instantiation::instance();
+
+        $raffle = $this->new_raffle($request,$status);
+
+        return redirect()->route('raffle.list',$instance)->with('success', 'Sorteo creado con éxito.');
+
+    }
+
+    private function new_raffle($request,$status)
+    {
+
+        $request->validate([
+            'title' => 'required|min:5|max:255',
+            'prize' => 'required|min:5|max:255',
+        ]);
+
+        // creación de un nuevo sorteo
+        $raffle = Raffle::create([
+            'title' => $request->input('title'),
+            'prize' => $request->input('prize'),
+            'event_id' => $request->input('event')
+        ]);
+
+        $raffle->save();
+
+        return $raffle;
+    }
+
 }
