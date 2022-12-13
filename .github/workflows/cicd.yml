@@ -70,7 +70,7 @@ jobs:
           id: meta
           uses: docker/metadata-action@v4
           with:
-            images: celhersot/innosoft-evidentia-1
+            images: celhersot5/innosoft-evidentia-1
 
         - name: Build and push
           uses: docker/build-push-action@v2
