@@ -11,28 +11,28 @@ use App\Models\KanbanIssues;
 
 class KanbanTest extends TestCase
 {
-    private function loginWithAlumno1(){
+    public function testLoginWithAlumno1(){
         $request = [
             'username' => 'alumno1',
             'password' => 'alumno1'
         ];
-        $response = $this->post('login',$request);
+        $response = $this->post('/login_p',$request);
+        $response->assertSessionDoesntHaveErrors();
     }
 
-    private function loginWithCoordinador1(){
+    public function testLoginWithCoordinador1(){
         $request = [
             'username' => 'coordinador1',
             'password' => 'coordinador1'
         ];
-        $response = $this->post('login',$request);
+        $response = $this->post('/login_p',$request);
+        $response->assertSessionDoesntHaveErrors();
     }
 
     public function testTableSuccess()
     {
         
-        $this->loginWithAlumno1();
-
-
+        $this->testLoginWithAlumno1();
         $response = $this->get('/21/kanban/table');
         $response->assertStatus(302);
     }
@@ -40,7 +40,7 @@ class KanbanTest extends TestCase
     public function testCreateTaskPositive()
     {
         
-        $this->loginWithCoordinador1();
+        $this->testLoginWithCoordinador1();
 
         
         $request = [
@@ -49,33 +49,57 @@ class KanbanTest extends TestCase
             'hours' => '1',
             'user_id' => '1',
             'comittee_id' => '1',
-            'type' => 'PENDING'
+            'type' => 'PENDING',
         ];
 
-        $response = $this->post('publish',$request);
+        $response = $this->post('/kanban/publish',$request);
 
         $response->assertStatus(302);
+        
     }
 
-    public function testCreateTaskNegative1()
+    public function testCreateTaskNegativeEmptyDescription()
     {
         
-        $this->loginWithCoordinador1();
+        $this->testLoginWithCoordinador1();
 
         
         $request = [
             'task' => 'Test task failed',
-            'description' => 'a',
+            'description' => '',
             'hours' => '1',
             'user_id' => '1',
             'comittee_id' => '1',
-            'type' => 'PENDING'
+            'type' => 'PENDING',
         ];
 
-        $response = $this->post('publish',$request);
+        $response = $this->post('/kanban/publish/',$request);
         
         $issues = KanbanIssues::where(['task' => 'Test task failed'])->get();
-
         $this -> assertEmpty($issues);
+        $response->assertStatus(302);
+    }
+
+    public function testCreateTaskNegativeTooShortDescription()
+    {
+        
+        $this->testLoginWithCoordinador1();
+
+        
+        $request = [
+            'task' => 'Test task failed',
+            'description' => 'aa',
+            'hours' => '1',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$request);
+        
+        $issues = KanbanIssues::where(['task' => 'Test task failed'])->get();
+        $this -> assertEmpty($issues);
+
+        $response->assertStatus(302);
     }
 }
