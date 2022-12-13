@@ -120,4 +120,38 @@ class KanbanTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function testCreateTaskNegativeEmptyHours()
+    {
+             
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => '',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
+
+    public function testCreateTaskNegativeExcessiveHours()
+    {
+   
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => '1000000',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
 }
