@@ -222,4 +222,64 @@ class KanbanTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function testCreateTaskNegativeStringHours()
+    {
+             
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => 'dos',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
+
+    public function testCreateTaskNegativeLimitMinTask()
+    {
+   
+        $issue = [
+            'task' => 'Fail',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+
+        $issue = [
+            'task' => 'aaaaa',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+
+        $issue = [
+            'task' => 'aaaaaa',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
 }
