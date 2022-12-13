@@ -154,4 +154,38 @@ class KanbanTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function testCreateTaskNegativeEmptyUser()
+    {
+             
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
+
+    public function testCreateTaskNegativeWrongUser()
+    {
+   
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '999',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
 }
