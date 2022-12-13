@@ -282,4 +282,91 @@ class KanbanTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function testCreateTaskNegativeLimitMaxTask()
+    {
+   
+        $issue = [
+            'task' => 'FailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFa',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+
+        $issue = [
+            'task' => 'FailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFai',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+
+        $issue = [
+            'task' => 'FailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFailFail',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
+
+    public function testCreateTaskNegativeLimitMinDescription()
+    {
+   
+        $issue = [
+            'task' => 'Failed',
+            'description' => 'Failed ta',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+
+        $issue = [
+            'task' => 'Failed',
+            'description' => 'Failed tas',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+
+        $issue = [
+            'task' => 'Failed',
+            'description' => 'Failed task',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '1',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
+    
 }
