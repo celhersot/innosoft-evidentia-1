@@ -188,4 +188,38 @@ class KanbanTest extends TestCase
 
         $response->assertStatus(302);
     }
+
+    public function testCreateTaskNegativeEmptyComittee()
+    {
+             
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
+
+    public function testCreateTaskNegativeWrongComittee()
+    {
+   
+        $issue = [
+            'task' => 'Failed Task',
+            'description' => 'Failed task creation description',
+            'hours' => '2',
+            'user_id' => '1',
+            'comittee_id' => '999',
+            'type' => 'PENDING',
+        ];
+
+        $response = $this->post('/kanban/publish/',$issue);
+
+        $response->assertStatus(302);
+    }
 }
