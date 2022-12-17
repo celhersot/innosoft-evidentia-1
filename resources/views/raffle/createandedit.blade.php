@@ -18,16 +18,16 @@
 
                         <div class="form-row">
                             
-                            <x-input col="5" attr="Titulo" :value="$raffle->title ?? ''" label="Título" description="Escribe un título para el sorteo (mínimo 5 caracteres)"/>
+                        <x-input col="5" attr="title" :value="$raffle->title ?? ''" label="Título" description="Escribe un título para el sorteo (mínimo 5 caracteres)"/>
                             @error("title")
                                 <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    
                                 </span>
                             @enderror
-                            <x-input col="5" attr="Premio" :value="$raffle->prize ?? ''" label="Premio" description="Escribe el premio a sortear"/>
+                            <x-input col="5" attr="prize" :value="$raffle->prize ?? ''" label="Premio" description="Escribe el premio a sortear"/>
                             @error("prize")
                                 <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
+                                    
                                 </span>
                             @enderror
                             <label for="event">Selecciona el evento donde se realizará el sorteo </label>
