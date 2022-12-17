@@ -9,7 +9,7 @@
             @endif
             <x-li route="registercoordinator.event.list" icon='fas fa-calendar-alt' name="Gestionar eventos"/>
             <x-li route="registercoordinator.attendee.list" icon='fas fa-user-check' name="Gestionar asistencias"/>
-
+	        <x-li route="raffles.list" icon='fas fa-gift' name="Gestionar Sorteos"/>
         </ul>
     </nav>
 @endif

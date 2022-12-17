@@ -7,6 +7,7 @@ use App\Http\Controllers\MeetingSecretaryController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\EvidenceController;
 use App\Http\Controllers\SignController;
+use App\Http\Controllers\RafflesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
@@ -145,6 +146,16 @@ Route::group(['prefix' => '{instance}', 'middleware' => ['checkblock']], functio
     Route::get('/kanban/inprogress/{id}', 'KanbanIssuesController@issueinprogress')->name('kanban.issueinprogress');
     Route::get('/kanban/closed/{id}', 'KanbanIssuesController@issueclosed')->name('kanban.issueclosed');
 
+
+    /**
+     *  RAFFLES
+     */
+
+     Route::get('/raffles', 'RafflesController@list')->name('raffle.list');
+     Route::get('/raffles/create', 'RafflesController@create')->name('raffle.createandedit');
+     Route::post('/raffles/publish', 'RafflesController@publish')->name('raffle.publish');
+     Route::get('/raffles/view/{id}','RafflesController@view')->name('raffle.view');
+     Route::get('/raffles/raffle/{id}', 'RafflesController@raffle')->name('raffle.raffle');
 
     /**
      *  EVIDENCES
@@ -471,5 +482,13 @@ Route::group(['prefix' => '{instance}', 'middleware' => ['checkblock']], functio
      *  GIT
      */
     Route::get('/updates','GitController@list')->name('updates.list');
+
+
+    /**
+     *  RAFFLES
+     */
+
+    Route::get('/raffles', 'RafflesController@list')->name('raffles.list');
+
 
 });
