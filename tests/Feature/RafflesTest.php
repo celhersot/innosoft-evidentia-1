@@ -41,46 +41,68 @@ class RafflesTest extends TestCase
             'event_id' => '1'
         ];
 
-        $response = $this->post('publish',$request);
+        $response = $this->post('21/raffles/publish',$request);
 
         $response->assertStatus(302);
     }    
 
-    // public function testCreateRaffleNegative1()
-    // {
+    public function testCreateRaffleNegative1()
+    {
 
-    //     $this->loginWithRegisterCoordinador1();
-
-
-    //     $request = [
-    //         'title' => 'Test raffle failed',
-    //         'prize' => 'a',
-    //         'event_id' => '1'
-    //     ];
-
-    //     $response = $this->post('publish',$request);
-
-    //     $raffle = Raffle::where(['title' => 'Test raffle failed'])->get();
-
-    //     $this -> assertEmpty($raffle);
-    // }
-
-    // public function testCreateRaffleNegative2()
-    // {
-
-    //     $this->loginWithRegisterCoordinador1();
+        $this->loginWithRegisterCoordinador1();
 
 
-    //     $request = [
-    //         'title' => 'a',
-    //         'prize' => 'Wrong Title Raffle Prize',
-    //         'event_id' => '1'
-    //     ];
+        $request = [
+            'title' => 'Test raffle failed',
+            'prize' => 'a',
+            'event_id' => '1'
+        ];
 
-    //     $response = $this->post('publish',$request);
+        $response = $this->post('publish',$request);
 
-    //     $raffle = Raffle::where(['title' => 'a'])->get();
+        $raffle = Raffle::where(['title' => 'Test raffle failed'])->get();
 
-    //     $this -> assertEmpty($raffle);
-    // }
+        $this -> assertEmpty($raffle);
+    }
+
+    public function testCreateRaffleNegative2()
+    {
+
+        $this->loginWithRegisterCoordinador1();
+
+
+        $request = [
+            'title' => 'a',
+            'prize' => 'Wrong Title Raffle Prize',
+            'event_id' => '1'
+        ];
+
+        $response = $this->post('publish',$request);
+
+        $raffle = Raffle::where(['title' => 'a'])->get();
+
+        $this -> assertEmpty($raffle);
+    }
+
+    public function testRaffleRaffle()
+    {
+
+        $this->loginWithRegisterCoordinador1();
+
+
+        $request = [
+            'title' => 'Test Raffle',
+            'prize' => 'Raffle Prize',
+            'event_id' => '1'
+        ];
+
+        $response = $this->post('publish',$request);
+
+        $raffle = Raffle::where(['title' => 'Test Raffle'])->get();
+
+        $response = $this->get('21/raffles/raffle/'+ $raffle->id);
+
+        $response->assertStatus(302);
+    }
+
 }
