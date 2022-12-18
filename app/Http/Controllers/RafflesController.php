@@ -92,7 +92,7 @@ class RafflesController extends Controller{
 
         $raffle = $this->new_raffle($request,$status);
 
-        return redirect()->route('raffle.view', ['instance' => $instance, 'id' => $raffle->id])->with('success', 'Sorteo creado con éxito.');
+        return redirect()->route('instances.home')->with('success', 'Sorteo creado con éxito.');
 
     }
 
