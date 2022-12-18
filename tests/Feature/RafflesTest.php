@@ -25,7 +25,7 @@ class RafflesTest extends TestCase
         $this->loginWithRegisterCoordinador1();
 
 
-        $response = $this->get('/21/raffles');
+        $response = $this->get('/raffles');
         $response->assertStatus(302);
     }
 
@@ -41,7 +41,7 @@ class RafflesTest extends TestCase
             'event_id' => '1'
         ];
 
-        $response = $this->post('21/raffles/publish',$request);
+        $response = $this->post('/raffles/publish',$request);
 
         $response->assertStatus(302);
     }    
@@ -58,11 +58,9 @@ class RafflesTest extends TestCase
             'event_id' => '1'
         ];
 
-        $response = $this->post('publish',$request);
+        $response = $this->post('/raffles/publish',$request);
 
-        $raffle = Raffle::where(['title' => 'Test raffle failed'])->get();
-
-        $this -> assertEmpty($raffle);
+        $response->assertStatus(302);
     }
 
     public function testCreateRaffleNegative2()
@@ -77,11 +75,9 @@ class RafflesTest extends TestCase
             'event_id' => '1'
         ];
 
-        $response = $this->post('publish',$request);
+        $response = $this->post('/raffles/publish',$request);
 
-        $raffle = Raffle::where(['title' => 'a'])->get();
-
-        $this -> assertEmpty($raffle);
+        $response->assertStatus(302);
     }
 
     public function testRaffleRaffle()
@@ -91,16 +87,35 @@ class RafflesTest extends TestCase
 
 
         $request = [
+            'id' => '1',
             'title' => 'Test Raffle',
             'prize' => 'Raffle Prize',
             'event_id' => '1'
         ];
 
-        $response = $this->post('publish',$request);
+        $response = $this->post('/raffles/publish',$request);
 
-        $raffle = Raffle::where(['title' => 'Test Raffle'])->get();
+        $response = $this->get('/raffles/raffle/1');
 
-        $response = $this->get('21/raffles/raffle/'+ $raffle->id);
+        $response->assertStatus(302);
+    }
+
+    public function testNegativeRaffleRaffle()
+    {
+
+        $this->loginWithRegisterCoordinador1();
+
+
+        $request = [
+            'id' => '2',
+            'title' => 'Test Raffle',
+            'prize' => 'Raffle Prize',
+            'event_id' => '2'
+        ];
+
+        $response = $this->post('/raffles/publish',$request);
+
+        $response = $this->get('/raffles/raffle/2');
 
         $response->assertStatus(302);
     }
