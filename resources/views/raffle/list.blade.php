@@ -16,7 +16,6 @@
                             <table id="dataset" class="table table-hover table-responsive">
                                 <thead>
                                     <tr>
-                                        <th class="d-none d-sm-none d-md-table-cell d-lg-table-cell">ID</th>
                                         <th class="d-none d-sm-none d-md-table-cell d-lg-table-cell">Sorteo</th>
                                         <th class="d-none d-sm-none d-md-table-cell d-lg-table-cell">Evento</th>
                                         <th class="d-none d-sm-none d-md-table-cell d-lg-table-cell">Premio</th>
@@ -27,7 +26,6 @@
                                 <tbody>
                                     @foreach ($raffles as $raffle)
                                         <tr>
-                                        <td class="d-none d-sm-none d-md-table-cell d-lg-table-cell">{{$raffle->id}}</td>
                                         <td><a href="{{route('raffle.view',['id' => $raffle->id, 'instance' => \Instantiation::instance()])}}">{{$raffle->title}}</a></td>
                                         <td class="d-none d-sm-none d-md-table-cell d-lg-table-cell">{{$raffle->event->name}}</td>
                                         <td class="d-none d-sm-none d-md-table-cell d-lg-table-cell">{{$raffle->prize}}</td>
