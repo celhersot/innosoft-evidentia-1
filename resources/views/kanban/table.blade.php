@@ -49,7 +49,7 @@
                                             <p>Horas estimadas: {{$issue->hours}}h</p>
                                             @if($issue->user_id == Auth::user()->id)
                                                 <a href="{{route('kanban.issueinprogress',['instance' => $instance, 'id' => $issue->id])}}">
-                                                    Comenzar tarea.
+                                                    Start tarea.
                                                 </a>
                                             @endif
                                         </div>
